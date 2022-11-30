@@ -1,68 +1,38 @@
 class Car{
-    constructor(x,y,width,height,controlType,maxSpeed=3,color="red"){
-        this.x=x;
-        this.y=y;
-        this.width=width;
-        this.height=height;
-
+    constructor(x,y,width,height,controlType,maxSpeed=3){
+        this.x=x; // x coordinate of the car
+        this.y=y; // y coordinate of the car
+        this.width=width; // width of the car
+        this.height=height; // height of the car
+        // initial values for car used to move he car
         this.speed=0;
         this.acceleration=0.2;
         this.maxSpeed=maxSpeed;
         this.friction=0.05;
-        this.angle=0;
+        this.angle=0; // imagine a unit circle rotated anticlockwise to the right
         this.damaged=false;
-
-        this.useBrain=controlType=="AI";
 
         if(controlType!="DUMMY"){
             this.sensor=new Sensor(this);
-            this.brain=new NeuralNetwork(
-                [this.sensor.rayCount,6,4]
-            );
         }
         this.controls=new Controls(controlType);
-
-        this.img=new Image();
-        this.img.src="car.png"
-
-        this.mask=document.createElement("canvas");
-        this.mask.width=width;
-        this.mask.height=height;
-
-        const maskCtx=this.mask.getContext("2d");
-        this.img.onload=()=>{
-            maskCtx.fillStyle=color;
-            maskCtx.rect(0,0,this.width,this.height);
-            maskCtx.fill();
-
-            maskCtx.globalCompositeOperation="destination-atop";
-            maskCtx.drawImage(this.img,0,0,this.width,this.height);
-        }
     }
-
+    // update the car position and status in the animation 
     update(roadBorders,traffic){
+        // we want to render the car useless when it is damaged so we 
+        //only update the drawing if its not damaged
         if(!this.damaged){
             this.#move();
-            this.polygon=this.#createPolygon();
-            this.damaged=this.#assessDamage(roadBorders,traffic);
+            this.polygon=this.#createPolygon(); // create a new car at new position in the new anumation frame
+            this.damaged=this.#assessDamage(roadBorders,traffic); // check if car gets dammages in this frame (using intersections)
         }
         if(this.sensor){
-            this.sensor.update(roadBorders,traffic);
-            const offsets=this.sensor.readings.map(
-                s=>s==null?0:1-s.offset
-            );
-            const outputs=NeuralNetwork.feedForward(offsets,this.brain);
-
-            if(this.useBrain){
-                this.controls.forward=outputs[0];
-                this.controls.left=outputs[1];
-                this.controls.right=outputs[2];
-                this.controls.reverse=outputs[3];
-            }
+            this.sensor.update(roadBorders,traffic); // update sensor status and animation if they exist
         }
     }
 
     #assessDamage(roadBorders,traffic){
+        // this car checks for collisions of the players/agents car  
         for(let i=0;i<roadBorders.length;i++){
             if(polysIntersect(this.polygon,roadBorders[i])){
                 return true;
@@ -75,11 +45,12 @@ class Car{
         }
         return false;
     }
-
+    // function to define a set of points to form a polygon 
     #createPolygon(){
         const points=[];
         const rad=Math.hypot(this.width,this.height)/2;
         const alpha=Math.atan2(this.width,this.height);
+        // you can play with these point values and add more to make different value 
         points.push({
             x:this.x-Math.sin(this.angle-alpha)*rad,
             y:this.y-Math.cos(this.angle-alpha)*rad
@@ -100,66 +71,63 @@ class Car{
     }
 
     #move(){
+        // basic physics used to make the car move naturally
+        // and update position with controls
         if(this.controls.forward){
             this.speed+=this.acceleration;
         }
         if(this.controls.reverse){
             this.speed-=this.acceleration;
         }
-
+        // set cap the car speed limit in forward direction 
         if(this.speed>this.maxSpeed){
             this.speed=this.maxSpeed;
         }
+        // set cap the car speed limit in reverse direction 
         if(this.speed<-this.maxSpeed/2){
             this.speed=-this.maxSpeed/2;
         }
-
+        // adding friction  to avoid abrupt stopping
         if(this.speed>0){
             this.speed-=this.friction;
         }
         if(this.speed<0){
             this.speed+=this.friction;
         }
+        // used to avoid condition of slipping in animation
         if(Math.abs(this.speed)<this.friction){
             this.speed=0;
         }
 
         if(this.speed!=0){
-            const flip=this.speed>0?1:-1;
+            const flip=this.speed>0?1:-1; // variable to make car move like real world in reverse direction
             if(this.controls.left){
-                this.angle+=0.03*flip;
+                this.angle+=0.03*flip; // update angle of car to go left
             }
             if(this.controls.right){
-                this.angle-=0.03*flip;
+                this.angle-=0.03*flip; // update angle of car to go right
             }
         }
-
+        // finally update the position of the car in terms of x and y
         this.x-=Math.sin(this.angle)*this.speed;
         this.y-=Math.cos(this.angle)*this.speed;
     }
 
-    draw(ctx,drawSensor=false){
-        if(this.sensor && drawSensor){
+    draw(ctx,color){
+        if(this.damaged){
+            ctx.fillStyle="gray";
+        }else{
+            ctx.fillStyle=color;
+        }
+        ctx.beginPath();
+        ctx.moveTo(this.polygon[0].x,this.polygon[0].y);
+        for(let i=1;i<this.polygon.length;i++){
+            ctx.lineTo(this.polygon[i].x,this.polygon[i].y);
+        }
+        ctx.fill();
+
+        if(this.sensor){
             this.sensor.draw(ctx);
         }
-
-        ctx.save();
-        ctx.translate(this.x,this.y);
-        ctx.rotate(-this.angle);
-        if(!this.damaged){
-            ctx.drawImage(this.mask,
-                -this.width/2,
-                -this.height/2,
-                this.width,
-                this.height);
-            ctx.globalCompositeOperation="multiply";
-        }
-        ctx.drawImage(this.img,
-            -this.width/2,
-            -this.height/2,
-            this.width,
-            this.height);
-        ctx.restore();
-
     }
 }
