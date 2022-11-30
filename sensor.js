@@ -1,16 +1,14 @@
 class Sensor{
-    // this class simulates a sensors data 
     constructor(car){
         this.car=car;
-        this.rayCount=5;
+        this.rayCount=13;
         this.rayLength=150;
-        this.raySpread=Math.PI/2;
+        this.raySpread=Math.PI*2;
 
         this.rays=[];
         this.readings=[];
     }
-    // function to update sensor animation and 
-    // get readings (readings of sensor will be our inputs in the NeuralNet)
+
     update(roadBorders,traffic){
         this.#castRays();
         this.readings=[];
@@ -24,8 +22,7 @@ class Sensor{
             );
         }
     }
-    // function to calculate the point distance from closest object as the reading
-    // checks for all road borders and cars in traffic
+
     #getReading(ray,roadBorders,traffic){
         let touches=[];
 
@@ -60,11 +57,11 @@ class Sensor{
             return null;
         }else{
             const offsets=touches.map(e=>e.offset);
-            const minOffset=Math.min(...offsets); // gets closest object
+            const minOffset=Math.min(...offsets);
             return touches.find(e=>e.offset==minOffset);
         }
     }
-    // this function actually draws the sensor rays on the car animation
+
     #castRays(){
         this.rays=[];
         for(let i=0;i<this.rayCount;i++){
