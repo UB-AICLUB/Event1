@@ -1,17 +1,20 @@
 class Car{
     constructor(x,y,width,height,controlType,maxSpeed=3){
+        // this is for creating shape of the car
         this.x=x;
         this.y=y;
         this.width=width;
         this.height=height;
-
+        // you can control the world physics with these variables
         this.speed=0;
         this.acceleration=0.2;
         this.maxSpeed=maxSpeed;
         this.friction=0.05;
         this.angle=0;
+        // if damaged == true the car wont work
         this.damaged=false;
 
+        // adding logic to use neural network / normal car / traffiv car
         this.useBrain=controlType=="AI";
 
         if(controlType!="DUMMY"){
@@ -44,7 +47,7 @@ class Car{
             }
         }
     }
-
+    // checks if car is damages by seeing if any of the wals intersect with its shape.
     #assessDamage(roadBorders,traffic){
         for(let i=0;i<roadBorders.length;i++){
             if(polysIntersect(this.polygon,roadBorders[i])){
@@ -58,7 +61,8 @@ class Car{
         }
         return false;
     }
-
+    // you can define the shape of the car exactly 
+    // (fyi you can make any shape like a bird using polygon points for more interesting visuals)
     #createPolygon(){
         const points=[];
         const rad=Math.hypot(this.width,this.height)/2;
@@ -81,7 +85,7 @@ class Car{
         });
         return points;
     }
-
+    // the equations that the car works with
     #move(){
         if(this.controls.forward){
             this.speed+=this.acceleration;
@@ -120,7 +124,7 @@ class Car{
         this.x-=Math.sin(this.angle)*this.speed;
         this.y-=Math.cos(this.angle)*this.speed;
     }
-
+    // draw the car to frame
     draw(ctx,color,drawSensor=false){
         if(this.damaged){
             ctx.fillStyle="gray";

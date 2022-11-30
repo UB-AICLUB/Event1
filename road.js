@@ -1,16 +1,20 @@
 class Road{
+    // initial values
     constructor(x,width,laneCount=3){
+        // get initial values of the number of lanes, 
+        // car width and x coordinate if the road
         this.x=x;
         this.width=width;
         this.laneCount=laneCount;
 
-        this.left=x-width/2;
-        this.right=x+width/2;
-
+        // defining length of the road
         const infinity=1000000;
         this.top=-infinity;
         this.bottom=infinity;
-
+        
+        // defining borders of the road
+        this.left=x-width/2;
+        this.right=x+width/2;
         const topLeft={x:this.left,y:this.top};
         const topRight={x:this.right,y:this.top};
         const bottomLeft={x:this.left,y:this.bottom};
@@ -20,13 +24,14 @@ class Road{
             [topRight,bottomRight]
         ];
     }
-
+    // returns the center of a lane for each lane of the road 
+    // (used for initial placement of the cars)
     getLaneCenter(laneIndex){
         const laneWidth=this.width/this.laneCount;
         return this.left+laneWidth/2+
             Math.min(laneIndex,this.laneCount-1)*laneWidth;
     }
-
+    // draws road on the frame
     draw(ctx){
         ctx.lineWidth=5;
         ctx.strokeStyle="white";

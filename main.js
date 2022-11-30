@@ -1,14 +1,20 @@
+// creating canvas to draw on
 const carCanvas=document.getElementById("carCanvas");
 carCanvas.width=200;
 const networkCanvas=document.getElementById("networkCanvas");
 networkCanvas.width=500;
 
+// making context for animation
 const carCtx = carCanvas.getContext("2d");
 const networkCtx = networkCanvas.getContext("2d");
 
+// creating Road
 const road=new Road(carCanvas.width/2,carCanvas.width*0.9);
 
-const N=100;
+// Note: if N=1 then there will be no training
+const N=100; // change this to add more cars for training 
+
+// code to generate cars that will train with different set of weights
 const cars=generateCars(N);
 let bestCar=cars[0];
 if(localStorage.getItem("bestBrain")){
@@ -21,10 +27,13 @@ if(localStorage.getItem("bestBrain")){
     }
 }
 
+// generate random traffic every time you refresh
 const traffic= generateTraffic(road);
 
+// starts animation
 animate();
 
+// helper functions  
 function save(){
     localStorage.setItem("bestBrain",
         JSON.stringify(bestCar.brain));
@@ -41,6 +50,7 @@ function generateCars(N){
     }
     return cars;
 }
+
 
 function animate(time){
     for(let i=0;i<traffic.length;i++){

@@ -1,4 +1,6 @@
 class Controls{
+    // defines what keys of the keyboard do what 
+    // ( you can add more controls for future applications)
     constructor(type){
         this.forward=false;
         this.left=false;

@@ -1,7 +1,8 @@
+// linear interpolation to get a random number in a given range
 function lerp(A,B,t){
     return A+(B-A)*t;
 }
-
+// checks ofr points of intersection between 2 lines
 function getIntersection(A,B,C,D){ 
     const tTop=(D.x-C.x)*(A.y-C.y)-(D.y-C.y)*(A.x-C.x);
     const uTop=(C.y-A.y)*(A.x-B.x)-(C.x-A.x)*(A.y-B.y);
@@ -22,6 +23,7 @@ function getIntersection(A,B,C,D){
     return null;
 }
 
+// checks for intersection between 2 shapes
 function polysIntersect(poly1, poly2){
     for(let i=0;i<poly1.length;i++){
         for(let j=0;j<poly2.length;j++){
@@ -39,6 +41,7 @@ function polysIntersect(poly1, poly2){
     return false;
 }
 
+// shows the best car as opaque while others as translucent when training.
 function getRGBA(value){
     const alpha=Math.abs(value);
     const R=value<0?0:255;
