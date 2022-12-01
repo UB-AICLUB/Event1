@@ -6,6 +6,13 @@ In this project we have added a Neural network and some set up to play with the 
 
 All the basic physics and sensor logic are same as before, we have added some comments in the for more clarity.
 
+## How to use
+- upload the brain with 36000 file using (⏫) button to make the car use my trained weights and train them more by updating N>1 in main.js
+
+- if you like the new best car hit (💾) save and then download with (⏬) button
+
+- if you dont like the weights you can hit (🗑️) to delete and start from scratch or upload another set of weights 
+
 ## Files to play with
 - In general you can use all the files to create something new.
 - you only need to interact witht the constructors of the classes if you dont want to change any physics parameters. (read comments for more info on this)

@@ -1,3 +1,4 @@
+// this file defines the controls of the car
 class Controls{
     constructor(type){
         this.forward=false;

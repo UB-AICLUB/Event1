@@ -1,10 +1,11 @@
 class Car{
     constructor(x,y,width,height,controlType,maxSpeed=3,color="red"){
+        // car properties
         this.x=x;
         this.y=y;
         this.width=width;
         this.height=height;
-
+        // physics related variable
         this.speed=0;
         this.acceleration=0.2;
         this.maxSpeed=maxSpeed;
@@ -21,7 +22,7 @@ class Car{
             );
         }
         this.controls=new Controls(controlType);
-
+        // image  of car 
         this.img=new Image();
         this.img.src="car.png"
 
@@ -39,7 +40,7 @@ class Car{
             maskCtx.drawImage(this.img,0,0,this.width,this.height);
         }
     }
-
+    // update frames and check
     update(roadBorders,traffic){
         if(!this.damaged){
             this.#move();
@@ -75,7 +76,8 @@ class Car{
         }
         return false;
     }
-
+    // you can modify (by defining more points) to make the 
+    // car of any shape you want like hexagon
     #createPolygon(){
         const points=[];
         const rad=Math.hypot(this.width,this.height)/2;
@@ -98,7 +100,7 @@ class Car{
         });
         return points;
     }
-
+    // this function defines the physics of the car (eqns)
     #move(){
         if(this.controls.forward){
             this.speed+=this.acceleration;
@@ -137,7 +139,7 @@ class Car{
         this.x-=Math.sin(this.angle)*this.speed;
         this.y-=Math.cos(this.angle)*this.speed;
     }
-
+    // draws each frame on to screen
     draw(ctx,drawSensor=false){
         if(this.sensor && drawSensor){
             this.sensor.draw(ctx);

@@ -1,16 +1,15 @@
 class Road{
     constructor(x,width,laneCount=3){
-        this.x=x;
-        this.width=width;
-        this.laneCount=laneCount;
+        this.x=x; // x coordinate of road
+        this.width=width; // road width
+        this.laneCount=laneCount;// number of lanes on road
 
-        this.left=x-width/2;
-        this.right=x+width/2;
-
+        // defining road borders for cars
         const infinity=1000000;
         this.top=-infinity;
         this.bottom=infinity;
-
+        this.left=x-width/2;
+        this.right=x+width/2;
         const topLeft={x:this.left,y:this.top};
         const topRight={x:this.right,y:this.top};
         const bottomLeft={x:this.left,y:this.bottom};
@@ -20,13 +19,13 @@ class Road{
             [topRight,bottomRight]
         ];
     }
-
+// gwt center of lanes to place cars in initially
     getLaneCenter(laneIndex){
         const laneWidth=this.width/this.laneCount;
         return this.left+laneWidth/2+
             Math.min(laneIndex,this.laneCount-1)*laneWidth;
     }
-
+// draw road to screen 
     draw(ctx){
         ctx.lineWidth=5;
         ctx.strokeStyle="white";

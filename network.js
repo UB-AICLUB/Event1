@@ -1,13 +1,13 @@
 class NeuralNetwork{
     constructor(neuronCounts){
-        this.layers=[];
+        this.layers=[]; // this array startes structure of nn
         for(let i=0;i<neuronCounts.length-1;i++){
             this.layers.push(new Layer(
                 neuronCounts[i],neuronCounts[i+1]
             ));
         }
     }
-
+    // function to call feedforward output of each layer
     static feedForward(givenInputs,network){
         let outputs=Layer.feedForward(
             givenInputs,network.layers[0]);
@@ -17,7 +17,7 @@ class NeuralNetwork{
         }
         return outputs;
     }
-
+    // updates the weights of each car neuran with a small random value between -1 and 1
     static mutate(network,amount=1){
         network.layers.forEach(layer => {
             for(let i=0;i<layer.biases.length;i++){

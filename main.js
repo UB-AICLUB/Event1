@@ -1,14 +1,16 @@
+// code to make canvas
 const carCanvas=document.getElementById("carCanvas");
 carCanvas.width=200;
 const networkCanvas=document.getElementById("networkCanvas");
 networkCanvas.width=500;
-
+// create context for drawing cars and network
 const carCtx = carCanvas.getContext("2d");
 const networkCtx = networkCanvas.getContext("2d");
 
 const road=new Road(carCanvas.width/2,carCanvas.width*0.9);
-
-const N=1;
+// if N=1 no training
+const N=10;// number of cars to train
+// generate cars to train
 const cars=generateCars(N);
 let bestCar=cars[0];
 if(localStorage.getItem("bestBrain")){
@@ -20,7 +22,7 @@ if(localStorage.getItem("bestBrain")){
         }
     }
 }
-
+// traffic (hard coded)
 const traffic=[
     new Car(road.getLaneCenter(1),-100,30,50,"DUMMY",2, getRandomColor()),
     new Car(road.getLaneCenter(0),-300,30,50,"DUMMY",2, getRandomColor()),
@@ -30,9 +32,11 @@ const traffic=[
     new Car(road.getLaneCenter(1),-700,30,50,"DUMMY",2, getRandomColor()),
     new Car(road.getLaneCenter(2),-700,30,50,"DUMMY",2, getRandomColor()),
 ];
-
+// animation
 animate();
 
+
+// Helper Functions to run simulation
 function save(){
     localStorage.setItem("bestBrain",
         JSON.stringify(bestCar.brain));

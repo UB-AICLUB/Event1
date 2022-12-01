@@ -1,3 +1,5 @@
+// logic to use and dowmload the weights as brain .txt file
+
 var download = document.getElementById('download'),
 brain = localStorage.getItem("bestBrain")
 

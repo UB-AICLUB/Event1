@@ -1,7 +1,8 @@
+// linear interpolation (get a random value between a range)
 function lerp(A,B,t){
     return A+(B-A)*t;
 }
-
+// get point of intersection in two lines
 function getIntersection(A,B,C,D){ 
     const tTop=(D.x-C.x)*(A.y-C.y)-(D.y-C.y)*(A.x-C.x);
     const uTop=(C.y-A.y)*(A.x-B.x)-(C.x-A.x)*(A.y-B.y);
@@ -21,7 +22,7 @@ function getIntersection(A,B,C,D){
 
     return null;
 }
-
+// get intersection points in two shapes
 function polysIntersect(poly1, poly2){
     for(let i=0;i<poly1.length;i++){
         for(let j=0;j<poly2.length;j++){
@@ -38,7 +39,7 @@ function polysIntersect(poly1, poly2){
     }
     return false;
 }
-
+// show best car as normal and rest training cars as translucent
 function getRGBA(value){
     const alpha=Math.abs(value);
     const R=value<0?0:255;
@@ -46,7 +47,7 @@ function getRGBA(value){
     const B=value>0?0:255;
     return "rgba("+R+","+G+","+B+","+alpha+")";
 }
-      
+// color cars randomly
 function getRandomColor(){
     const hue=290+Math.random()*260;
     return "hsl("+hue+", 100%, 60%)";

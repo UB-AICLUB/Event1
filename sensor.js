@@ -1,14 +1,14 @@
 class Sensor{
     constructor(car){
         this.car=car;
-        this.rayCount=5;
-        this.rayLength=150;
-        this.raySpread=Math.PI/2;
+        this.rayCount=5;// number of sensors
+        this.rayLength=150;// length of sensors in pixels
+        this.raySpread=Math.PI/2; // angle between first and last ray
 
         this.rays=[];
         this.readings=[];
     }
-
+// update to get readings per frame by checking intersection
     update(roadBorders,traffic){
         this.#castRays();
         this.readings=[];
@@ -22,7 +22,7 @@ class Sensor{
             );
         }
     }
-
+// checks for closest points of intersection as reading 
     #getReading(ray,roadBorders,traffic){
         let touches=[];
 
@@ -61,7 +61,7 @@ class Sensor{
             return touches.find(e=>e.offset==minOffset);
         }
     }
-
+// make rays equidistant 
     #castRays(){
         this.rays=[];
         for(let i=0;i<this.rayCount;i++){
@@ -81,7 +81,7 @@ class Sensor{
             this.rays.push([start,end]);
         }
     }
-
+// draws rays on car
     draw(ctx){
         for(let i=0;i<this.rayCount;i++){
             let end=this.rays[i][1];
